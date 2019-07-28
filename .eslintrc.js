@@ -28,6 +28,7 @@ module.exports = {
     "eol-last": ["error", "always"],
     "func-style": ["error", "expression", { allowArrowFunctions: true }],
     "newline-before-return": "error",
+    "no-console": 1,
     "no-dupe-class-members": "error",
     "no-var": "error",
     "@typescript-eslint/no-unused-vars": "off",
