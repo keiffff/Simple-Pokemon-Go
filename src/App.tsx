@@ -5,6 +5,7 @@ import {Button} from 'semantic-ui-react';
 import axios from 'axios';
 
 const indexPageStyle = css({
+  paddingTop: '24px',
   textAlign: 'center',
   backgroundColor: '#282c34',
   minHeight: '100vh',
@@ -33,7 +34,7 @@ const logoStyle = css({
 });
 
 const wrapperStyle = css({
-  padding: '20px 0 20px 0',
+  padding: '24px 0 24px 0',
   width: '80%',
   margin: '0 auto',
   background: '#FFFFFF',
@@ -79,7 +80,7 @@ const App: React.FC = () => {
 
       return pokemon;
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   };
 
