@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
+import logo from './assets/images/logo.svg';
 import {css, keyframes} from 'emotion';
-import {Button, Loader} from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react';
 import axios from 'axios';
 
 const indexPageStyle = css({
@@ -16,7 +16,6 @@ const headerStyle = css({
   alignItems: 'center',
   justifyContent: 'center',
   fontSize: 'calc(10px + 2vmin)',
-  color: '#61DAFB',
 });
 
 const logoSpin = keyframes(`
@@ -29,7 +28,7 @@ const logoSpin = keyframes(`
 
 const logoStyle = css({
   animation: `${logoSpin} infinite 20s linear`,
-  height: '20vmin',
+  height: '15vmin',
   pointerEvents: 'none',
 });
 
@@ -48,26 +47,35 @@ const pokemonShowStyle = css({
   color: '#263238',
 });
 
+const pokemonAppearanceStyle = css({
+  width: '200px',
+  height: '200px',
+});
+
+const pokemonNameStyle = css({
+  fontSize: '24px',
+});
+
 const DEFAULT_API_CONFIG = {
   baseURL: 'https://pokeapi.co/api/v2/',
   timeout: 5000,
 };
 
-const axiosClient = axios.create(DEFAULT_API_CONFIG);
+const pokeAPIClient = axios.create(DEFAULT_API_CONFIG);
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [appearance, setAppeaRance] = useState('');
 
-  const getPokemon = async (id: number) => {
+  const fetchPokemon = async (id: number) => {
     try {
       setIsLoading(true);
-      const res = await axiosClient.get(`/pokemon/${id}`);
+      const res = await pokeAPIClient.get(`/pokemon/${id}`);
       const pokemon = res.data;
       setName(pokemon.forms[0].name);
       setAppeaRance(pokemon.sprites.front_default);
-      setIsLoading(false);
+      setTimeout(() => setIsLoading(false), 1000);
 
       return pokemon;
     } catch (err) {
@@ -78,22 +86,25 @@ const App: React.FC = () => {
   const handleSubmit = () => {
     const lastPokemonId = 807;
     const pokemonId = Math.floor(Math.random() * (lastPokemonId + 1));
-    getPokemon(pokemonId);
+    fetchPokemon(pokemonId);
   };
 
   return (
     <div className={indexPageStyle}>
       <header className={headerStyle}>
         <img src={logo} className={logoStyle} alt="logo" />
-        <p>Click button to show Pokemon randomly!</p>
       </header>
       <div className={wrapperStyle}>
         {isLoading ? (
           <div className="ui active centered inline loader"></div>
         ) : (
           <div className={pokemonShowStyle}>
-            <img src={appearance} />
-            <p>{name}</p>
+            <img
+              src={appearance}
+              className={pokemonAppearanceStyle}
+              alt={name}
+            />
+            <p className={pokemonNameStyle}>{name}</p>
           </div>
         )}
       </div>
