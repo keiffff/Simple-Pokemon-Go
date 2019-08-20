@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import logo from './assets/images/logo.svg';
 import {css, keyframes} from 'emotion';
-import {Button} from 'semantic-ui-react';
+import {Button, Label} from 'semantic-ui-react';
+import {typeToColor} from './utils/type';
 import axios from 'axios';
 
 const indexPageStyle = css({
@@ -68,6 +69,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [appearance, setAppeaRance] = useState('');
+  const [types, setTypes] = useState([]);
 
   const fetchPokemon = async (id: number) => {
     try {
@@ -76,6 +78,7 @@ const App: React.FC = () => {
       const pokemon = res.data;
       setName(pokemon.forms[0].name);
       setAppeaRance(pokemon.sprites.front_default);
+      setTypes(pokemon.types.map(item => item.type.name));
       setTimeout(() => setIsLoading(false), 1000);
 
       return pokemon;
@@ -106,6 +109,11 @@ const App: React.FC = () => {
               alt={name}
             />
             <p className={pokemonNameStyle}>{name}</p>
+            {types.map(type => (
+              <Label key={type} color={typeToColor(type)}>
+                {type}
+              </Label>
+            ))}
           </div>
         )}
       </div>
