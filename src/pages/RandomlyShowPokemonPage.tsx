@@ -2,6 +2,7 @@ import * as React from 'react';
 import {css} from 'emotion';
 import {Button} from 'semantic-ui-react';
 import {pokeAPIClient} from '../configs/APIConfig';
+import bgGrass from '../assets/images/bg_grass.jpg';
 import {HeaderComponent} from '../components/HeaderComponent';
 import {PokemonAbstractComponent} from '../components/PokemonAbstractComponent';
 
@@ -16,7 +17,8 @@ const wrapperStyle = css({
   padding: '24px 0 24px 0',
   width: '80%',
   margin: '0 auto',
-  background: '#FFFFFF',
+  backgroundImage: `url(${bgGrass})`,
+  backgroundSize: 'cover',
   height: 'auto',
   borderRadius: '10px',
   marginBottom: '20px',

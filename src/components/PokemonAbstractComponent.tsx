@@ -11,6 +11,7 @@ type Props = {
 
 const pokemonShowStyle = css({
   color: '#263238',
+  paddingTop: '80px',
 });
 
 const pokemonAppearanceStyle = css({
@@ -19,7 +20,9 @@ const pokemonAppearanceStyle = css({
 });
 
 const pokemonNameStyle = css({
-  fontSize: '24px',
+  color: 'white',
+  fontSize: '32px',
+  fontWeight: 'bold',
 });
 
 export const PokemonAbstractComponent = (props: Props) => (
