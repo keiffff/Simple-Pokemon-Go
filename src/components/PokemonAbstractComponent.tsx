@@ -22,24 +22,22 @@ const pokemonNameStyle = css({
   fontSize: '24px',
 });
 
-export const PokemonAbstractComponent = (props: Props) => {
-  return (
-    <div className={pokemonShowStyle}>
-      {props.appearance ? (
-        <img
-          src={props.appearance}
-          className={pokemonAppearanceStyle}
-          alt={props.name}
-        />
-      ) : (
-        undefined
-      )}
-      <p className={pokemonNameStyle}>{props.name}</p>
-      {props.types.map(type => (
-        <Label key={type} color={typeToColor(type)}>
-          {type}
-        </Label>
-      ))}
-    </div>
-  );
-};
+export const PokemonAbstractComponent = (props: Props) => (
+  <div className={pokemonShowStyle}>
+    {props.appearance ? (
+      <img
+        src={props.appearance}
+        className={pokemonAppearanceStyle}
+        alt={props.name}
+      />
+    ) : (
+      undefined
+    )}
+    <p className={pokemonNameStyle}>{props.name}</p>
+    {props.types.map(type => (
+      <Label key={type} color={typeToColor(type)}>
+        {type}
+      </Label>
+    ))}
+  </div>
+);

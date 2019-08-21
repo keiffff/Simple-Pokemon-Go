@@ -24,10 +24,8 @@ const logoStyle = css({
   pointerEvents: 'none',
 });
 
-export const HeaderComponent: React.FC = () => {
-  return (
-    <header className={headerStyle}>
-      <img src={logo} className={logoStyle} alt="logo" />
-    </header>
-  );
-};
+export const HeaderComponent: React.FC = () => (
+  <header className={headerStyle}>
+    <img src={logo} className={logoStyle} alt="logo" />
+  </header>
+);
