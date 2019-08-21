@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import logo from './assets/images/logo.svg';
+import * as React from 'react';
 import {css, keyframes} from 'emotion';
-import {Button} from 'semantic-ui-react';
-import axios from 'axios';
+import {Button, Label} from 'semantic-ui-react';
+import logo from '../assets/images/logo.svg';
+import {typeToColor} from '../utils/type';
+import {pokeAPIClient} from '../constants/APIConfig';
 
 const indexPageStyle = css({
   paddingTop: '24px',
@@ -57,28 +58,26 @@ const pokemonNameStyle = css({
   fontSize: '24px',
 });
 
-const DEFAULT_API_CONFIG = {
-  baseURL: 'https://pokeapi.co/api/v2/',
-  timeout: 5000,
-};
-
-const pokeAPIClient = axios.create(DEFAULT_API_CONFIG);
-
-const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [appearance, setAppeaRance] = useState('');
+const RandomlyShowPokemonComponent: React.FC = () => {
+  const initialState = {
+    name: '',
+    appearance: '',
+    types: [],
+  };
+  const [pokemonState, setPokemonState] = React.useState(initialState);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const fetchPokemon = async (id: number) => {
     try {
       setIsLoading(true);
       const res = await pokeAPIClient.get(`/pokemon/${id}`);
-      const pokemon = res.data;
-      setName(pokemon.forms[0].name);
-      setAppeaRance(pokemon.sprites.front_default);
+      const fetchedPokemonState = {
+        name: res.data.forms[0].name,
+        appearance: res.data.sprites.front_default,
+        types: res.data.types.map(item => item.type.name),
+      };
+      setPokemonState(fetchedPokemonState);
       setTimeout(() => setIsLoading(false), 1000);
-
-      return pokemon;
     } catch (err) {
       throw err;
     }
@@ -100,12 +99,21 @@ const App: React.FC = () => {
           <div className="ui active centered inline loader"></div>
         ) : (
           <div className={pokemonShowStyle}>
-            <img
-              src={appearance}
-              className={pokemonAppearanceStyle}
-              alt={name}
-            />
-            <p className={pokemonNameStyle}>{name}</p>
+            {pokemonState.appearance ? (
+              <img
+                src={pokemonState.appearance}
+                className={pokemonAppearanceStyle}
+                alt={pokemonState.name}
+              />
+            ) : (
+              undefined
+            )}
+            <p className={pokemonNameStyle}>{pokemonState.name}</p>
+            {pokemonState.types.map(type => (
+              <Label key={type} color={typeToColor(type)}>
+                {type}
+              </Label>
+            ))}
           </div>
         )}
       </div>
@@ -116,4 +124,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default RandomlyShowPokemonComponent;
