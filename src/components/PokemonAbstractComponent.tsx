@@ -11,7 +11,7 @@ type Props = {
 
 const pokemonShowStyle = css({
   color: '#263238',
-  paddingTop: '80px',
+  paddingTop: 160,
 });
 
 const pokemonAppearanceStyle = css({

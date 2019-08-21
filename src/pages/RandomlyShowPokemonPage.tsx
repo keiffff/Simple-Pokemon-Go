@@ -14,15 +14,22 @@ const pageStyle = css({
 });
 
 const wrapperStyle = css({
-  padding: '24px 0 24px 0',
   width: '80%',
+  maxWidth: 500,
+  minWidth: 350,
   margin: '0 auto',
   backgroundImage: `url(${bgGrass})`,
   backgroundSize: 'cover',
-  height: 'auto',
+  height: 500,
   borderRadius: '10px',
   marginBottom: '20px',
   marginTop: '20px',
+  position: 'relative',
+});
+
+const loaderStyle = css({
+  position: 'absolute',
+  top: '50%',
 });
 
 const RandomlyShowPokemonPage: React.FC = () => {
@@ -38,9 +45,12 @@ const RandomlyShowPokemonPage: React.FC = () => {
     try {
       setIsLoading(true);
       const res = await pokeAPIClient.get(`/pokemon/${id}`);
+      const isShiny = Math.random() < 0.01;
       const fetchedPokemonAttribute = {
         name: res.data.forms[0].name,
-        appearance: res.data.sprites.front_default,
+        appearance: isShiny
+          ? res.data.sprites.front_shiny
+          : res.data.sprites.front_default,
         types: res.data.types.map(item => item.type.name),
       };
       setPokemonAttribute(fetchedPokemonAttribute);
@@ -61,13 +71,13 @@ const RandomlyShowPokemonPage: React.FC = () => {
       <HeaderComponent />
       <div className={wrapperStyle}>
         {isLoading ? (
-          <div className="ui active centered inline loader"></div>
+          <div className={`ui active loader ${loaderStyle}`}></div>
         ) : (
           <PokemonAbstractComponent {...pokemonAttribute} />
         )}
       </div>
       <Button color="red" onClick={handleSubmit}>
-        Show Pokemon!
+        Click to Appear!
       </Button>
     </div>
   );
