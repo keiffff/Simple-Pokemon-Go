@@ -36,6 +36,7 @@ module.exports = {
     "prefer-arrow-callback": "error",
     "prefer-const": "error",
     "prefer-spread": "error",
-    "require-yield": "error"
+    "require-yield": "error",
+    '@typescript-eslint/prefer-interface': 'off',
   }
 };
