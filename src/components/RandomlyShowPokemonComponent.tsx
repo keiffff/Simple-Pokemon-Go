@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {css} from 'emotion';
-import {Button} from 'semantic-ui-react';
-import {pokeAPIClient} from '../configs/APIConfig';
+import {Button, Label} from 'semantic-ui-react';
+import {typeToColor} from '../utils/typeToColor';
+import {pokeAPIClient} from '../api/config';
 import bgGrass from '../assets/images/bg_grass.jpg';
-import {HeaderComponent} from '../components/HeaderComponent';
-import {PokemonAbstractComponent} from '../components/PokemonAbstractComponent';
+import {HeaderComponent} from './HeaderComponent';
 
 const pageStyle = css({
   paddingTop: '24px',
@@ -32,7 +32,23 @@ const loaderStyle = css({
   top: '50%',
 });
 
-const RandomlyShowPokemonPage: React.FC = () => {
+const pokemonShowStyle = css({
+  color: '#263238',
+  paddingTop: 160,
+});
+
+const pokemonAppearanceStyle = css({
+  width: '200px',
+  height: '200px',
+});
+
+const pokemonNameStyle = css({
+  color: 'white',
+  fontSize: '32px',
+  fontWeight: 'bold',
+});
+
+const RandomlyShowPokemonComponent: React.FC = () => {
   const initialState = {
     name: '',
     appearance: '',
@@ -73,7 +89,23 @@ const RandomlyShowPokemonPage: React.FC = () => {
         {isLoading ? (
           <div className={`ui active loader ${loaderStyle}`}></div>
         ) : (
-          <PokemonAbstractComponent {...pokemonAttribute} />
+          <div className={pokemonShowStyle}>
+            {pokemonAttribute.appearance ? (
+              <img
+                src={pokemonAttribute.appearance}
+                className={pokemonAppearanceStyle}
+                alt={pokemonAttribute.name}
+              />
+            ) : (
+              undefined
+            )}
+            <p className={pokemonNameStyle}>{pokemonAttribute.name}</p>
+            {pokemonAttribute.types.map(type => (
+              <Label key={type} color={typeToColor(type)}>
+                {type}
+              </Label>
+            ))}
+          </div>
         )}
       </div>
       <Button color="red" onClick={handleSubmit}>
@@ -83,4 +115,4 @@ const RandomlyShowPokemonPage: React.FC = () => {
   );
 };
 
-export default RandomlyShowPokemonPage;
+export default RandomlyShowPokemonComponent;

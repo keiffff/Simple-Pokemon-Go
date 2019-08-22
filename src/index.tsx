@@ -4,12 +4,11 @@ import 'semantic-ui-css/semantic.min.css';
 import {BrowserRouter} from 'react-router-dom';
 import {Redirect, Route, Switch} from 'react-router';
 import './index.css';
-import RandomlyShowPokemonPage from './pages/RandomlyShowPokemonPage';
-import * as serviceWorker from './serviceWorker';
+import RandomlyShowPokemonComponent from './components/RandomlyShowPokemonComponent';
 
 const Page: React.FC = () => (
   <Switch>
-    <Route path="/" component={RandomlyShowPokemonPage} />
+    <Route path="/" component={RandomlyShowPokemonComponent} />
     <Redirect to="/" />
   </Switch>
 );
@@ -20,5 +19,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 );
-
-serviceWorker.unregister();
