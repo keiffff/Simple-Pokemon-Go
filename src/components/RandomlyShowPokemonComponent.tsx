@@ -1,10 +1,18 @@
 import * as React from 'react';
-import {css} from 'emotion';
-import {Button, Label} from 'semantic-ui-react';
-import {typeToColor} from '../utils/typeToColor';
-import {pokeAPIClient} from '../api/config';
+import { css } from 'emotion';
+import { Button, Label } from 'semantic-ui-react';
+
+import { typeToColor } from '../utils/typeToColor';
+import { fetchPokemonById } from '../api/pokeApi';
+import { Pokemon } from '../api/models/pokemon';
 import bgGrass from '../assets/images/bg_grass.jpg';
-import {HeaderComponent} from './HeaderComponent';
+import { HeaderComponent } from './HeaderComponent';
+
+interface State {
+  name: string;
+  appearance: string;
+  types: string[];
+}
 
 const pageStyle = css({
   paddingTop: '24px',
@@ -49,7 +57,7 @@ const pokemonNameStyle = css({
 });
 
 const RandomlyShowPokemonComponent: React.FC = () => {
-  const initialState = {
+  const initialState: State = {
     name: '',
     appearance: '',
     types: [],
@@ -57,17 +65,19 @@ const RandomlyShowPokemonComponent: React.FC = () => {
   const [pokemonAttribute, setPokemonAttribute] = React.useState(initialState);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const fetchPokemon = async (id: number) => {
+  const fetchPokemon = async () => {
     try {
       setIsLoading(true);
-      const res = await pokeAPIClient.get(`/pokemon/${id}`);
+      const lastPokemonId = 807;
+      const pokemonId = Math.floor(Math.random() * (lastPokemonId + 1));
+      const pokemon: Pokemon = await fetchPokemonById(pokemonId);
       const isShiny = Math.random() < 0.01;
       const fetchedPokemonAttribute = {
-        name: res.data.forms[0].name,
+        name: pokemon.name,
         appearance: isShiny
-          ? res.data.sprites.front_shiny
-          : res.data.sprites.front_default,
-        types: res.data.types.map(item => item.type.name),
+          ? pokemon.sprites.front_shiny
+          : pokemon.sprites.front_default,
+        types: pokemon.types.map(item => item.type.name),
       };
       setPokemonAttribute(fetchedPokemonAttribute);
       setTimeout(() => setIsLoading(false), 1000);
@@ -77,9 +87,7 @@ const RandomlyShowPokemonComponent: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    const lastPokemonId = 807;
-    const pokemonId = Math.floor(Math.random() * (lastPokemonId + 1));
-    fetchPokemon(pokemonId);
+    fetchPokemon();
   };
 
   return (
