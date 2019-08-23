@@ -3,15 +3,14 @@ import { css } from 'emotion';
 import { Button, Label } from 'semantic-ui-react';
 
 import { typeToColor } from '../utils/typeToColor';
-import { fetchPokemonById } from '../api/pokeApi';
 import { Pokemon } from '../api/models/pokemon';
 import bgGrass from '../assets/images/bg_grass.jpg';
 import { HeaderComponent } from './HeaderComponent';
 
-interface State {
-  name: string;
-  appearance: string;
-  types: string[];
+export interface RandomlyShowPokemonProps {
+  pokemon?: Pokemon;
+  isLoading: boolean;
+  fetchPokemonLoad: () => void;
 }
 
 const pageStyle = css({
@@ -56,71 +55,42 @@ const pokemonNameStyle = css({
   fontWeight: 'bold',
 });
 
-const RandomlyShowPokemonComponent: React.FC = () => {
-  const initialState: State = {
-    name: '',
-    appearance: '',
-    types: [],
-  };
-  const [pokemonAttribute, setPokemonAttribute] = React.useState(initialState);
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  const fetchPokemon = async () => {
-    try {
-      setIsLoading(true);
-      const lastPokemonId = 807;
-      const pokemonId = Math.floor(Math.random() * (lastPokemonId + 1));
-      const pokemon: Pokemon = await fetchPokemonById(pokemonId);
-      const isShiny = Math.random() < 0.01;
-      const fetchedPokemonAttribute = {
-        name: pokemon.name,
-        appearance: isShiny
-          ? pokemon.sprites.front_shiny
-          : pokemon.sprites.front_default,
-        types: pokemon.types.map(item => item.type.name),
-      };
-      setPokemonAttribute(fetchedPokemonAttribute);
-      setTimeout(() => setIsLoading(false), 1000);
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  const handleSubmit = () => {
-    fetchPokemon();
-  };
-
-  return (
-    <div className={pageStyle}>
-      <HeaderComponent />
-      <div className={wrapperStyle}>
-        {isLoading ? (
-          <div className={`ui active loader ${loaderStyle}`}></div>
-        ) : (
-          <div className={pokemonShowStyle}>
-            {pokemonAttribute.appearance ? (
+export const RandomlyShowPokemonComponent: React.FC<
+  RandomlyShowPokemonProps
+> = ({
+  pokemon = undefined,
+  isLoading = false,
+  fetchPokemonLoad = () => {},
+}) => (
+  <div className={pageStyle}>
+    <HeaderComponent />
+    <div className={wrapperStyle}>
+      {isLoading ? (
+        <div className={`ui active loader ${loaderStyle}`}></div>
+      ) : (
+        <div className={pokemonShowStyle}>
+          {pokemon ? (
+            <>
               <img
-                src={pokemonAttribute.appearance}
+                src={pokemon.sprites.front_default}
                 className={pokemonAppearanceStyle}
-                alt={pokemonAttribute.name}
+                alt={pokemon.name}
               />
-            ) : (
-              undefined
-            )}
-            <p className={pokemonNameStyle}>{pokemonAttribute.name}</p>
-            {pokemonAttribute.types.map(type => (
-              <Label key={type} color={typeToColor(type)}>
-                {type}
-              </Label>
-            ))}
-          </div>
-        )}
-      </div>
-      <Button color="red" onClick={handleSubmit}>
-        Click to Appear!
-      </Button>
+              <p className={pokemonNameStyle}>{pokemon.name}</p>
+              {pokemon.types.map(item => (
+                <Label key={item.slot} color={typeToColor(item.type.name)}>
+                  {item.type.name}
+                </Label>
+              ))}
+            </>
+          ) : (
+            undefined
+          )}
+        </div>
+      )}
     </div>
-  );
-};
-
-export default RandomlyShowPokemonComponent;
+    <Button color="red" onClick={fetchPokemonLoad}>
+      Click to Appear!
+    </Button>
+  </div>
+);

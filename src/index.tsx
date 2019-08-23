@@ -1,21 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'semantic-ui-css/semantic.min.css';
-import {BrowserRouter} from 'react-router-dom';
-import {Redirect, Route, Switch} from 'react-router';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { BrowserRouter } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router';
+import createSagaMiddleware from 'redux-saga';
+
 import './index.css';
-import RandomlyShowPokemonComponent from './components/RandomlyShowPokemonComponent';
+import RandomlyShowPokemonContainer from './containers/RandomlyShowPokemonContainer';
+import reducer from './reducers/fetchPokemon';
+import { rootSaga } from './sagas/fetchPokemon';
+
+const sagaMiddlaware = createSagaMiddleware();
+const store = createStore(reducer, applyMiddleware(sagaMiddlaware));
 
 const Page: React.FC = () => (
   <Switch>
-    <Route path="/" component={RandomlyShowPokemonComponent} />
+    <Route path="/" component={RandomlyShowPokemonContainer} />
     <Redirect to="/" />
   </Switch>
 );
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Page />
-  </BrowserRouter>,
-  document.getElementById('root')
+  <Provider store={store}>
+    <BrowserRouter>
+      <Page />
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById('root'),
 );
+
+sagaMiddlaware.run(rootSaga);
