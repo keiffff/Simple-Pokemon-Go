@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { css } from 'emotion';
-import { Button, Label } from 'semantic-ui-react';
+import { Button, Dimmer, Label, Loader } from 'semantic-ui-react';
 
 import { typeToColor } from '../utils/typeToColor';
 import { Pokemon } from '../api/models/pokemon';
@@ -31,12 +31,6 @@ const wrapperStyle = css({
   borderRadius: '10px',
   marginBottom: '20px',
   marginTop: '20px',
-  position: 'relative',
-});
-
-const loaderStyle = css({
-  position: 'absolute',
-  top: '50%',
 });
 
 const pokemonShowStyle = css({
@@ -66,7 +60,9 @@ export const RandomlyShowPokemonComponent: React.FC<
     <HeaderComponent />
     <div className={wrapperStyle}>
       {isLoading ? (
-        <div className={`ui active loader ${loaderStyle}`}></div>
+        <Dimmer active>
+          <Loader size="large">Loading</Loader>
+        </Dimmer>
       ) : (
         <div className={pokemonShowStyle}>
           {pokemon ? (

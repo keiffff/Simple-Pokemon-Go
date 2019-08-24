@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
+import { withRouter } from 'react-router';
 
 import { RandomlyShowPokemonComponent } from '../components/RandomlyShowPokemonComponent';
-import { fetchPokemon } from '../actions/fetchPokemon';
+import { ActionType } from '../actions/fetchPokemon';
 import { Pokemon } from '../api/models/pokemon';
 import { State } from '../reducers/fetchPokemon';
 
@@ -13,35 +13,25 @@ interface StateProps {
   isLoading: boolean;
 }
 
-interface DispatchProps {
-  fetchPokemonLoad: () => void;
-}
+const RandomlyShowPokemonContainer: React.FC = () => {
+  const stateProps: StateProps = useSelector((state: State) => ({
+    pokemon: state.pokemon,
+    isLoading: state.isLoading,
+  }));
+  const dispatch: Dispatch = useDispatch();
 
-type Props = StateProps & DispatchProps & RouteComponentProps;
+  const fetchPokemonLoad: () => void = React.useCallback(
+    () => dispatch({ type: ActionType.LOAD }),
+    [dispatch],
+  );
 
-const mapStateToProps = (state: State): StateProps => ({
-  pokemon: state.pokemon,
-  isLoading: state.isLoading,
-});
+  return (
+    <RandomlyShowPokemonComponent
+      pokemon={stateProps.pokemon}
+      isLoading={stateProps.isLoading}
+      fetchPokemonLoad={fetchPokemonLoad}
+    />
+  );
+};
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps =>
-  bindActionCreators({ fetchPokemonLoad: () => fetchPokemon.load() }, dispatch);
-
-const RandomlyShowPokemonContainer: React.FC<Props> = ({
-  pokemon,
-  isLoading,
-  fetchPokemonLoad,
-}) => (
-  <RandomlyShowPokemonComponent
-    pokemon={pokemon}
-    isLoading={isLoading}
-    fetchPokemonLoad={fetchPokemonLoad}
-  />
-);
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(RandomlyShowPokemonContainer),
-);
+export default withRouter(RandomlyShowPokemonContainer);
