@@ -2,7 +2,7 @@ import * as React from 'react';
 import { css } from 'emotion';
 import { Button, Dimmer, Label, Loader } from 'semantic-ui-react';
 
-import { typeToColor } from '../utils/typeToColor';
+import toColor from '../utils/pokemonTypeToColor';
 import { Pokemon } from '../api/models/pokemon';
 import bgGrass from '../assets/images/bg_grass.jpg';
 import { HeaderComponent } from './HeaderComponent';
@@ -55,38 +55,40 @@ export const RandomlyShowPokemonComponent: React.FC<
   pokemon = undefined,
   isLoading = false,
   fetchPokemonLoad = () => {},
-}) => (
-  <div className={pageStyle}>
-    <HeaderComponent />
-    <div className={wrapperStyle}>
-      {isLoading ? (
-        <Dimmer active>
-          <Loader size="large">Loading</Loader>
-        </Dimmer>
-      ) : (
-        <div className={pokemonShowStyle}>
-          {pokemon ? (
-            <>
-              <img
-                src={pokemon.sprites.front_default}
-                className={pokemonAppearanceStyle}
-                alt={pokemon.name}
-              />
-              <p className={pokemonNameStyle}>{pokemon.name}</p>
-              {pokemon.types.map(item => (
-                <Label key={item.slot} color={typeToColor(item.type.name)}>
-                  {item.type.name}
-                </Label>
-              ))}
-            </>
-          ) : (
-            undefined
-          )}
-        </div>
-      )}
+}) => {
+  return (
+    <div className={pageStyle}>
+      <HeaderComponent />
+      <div className={wrapperStyle}>
+        {isLoading ? (
+          <Dimmer active>
+            <Loader size="large">Loading</Loader>
+          </Dimmer>
+        ) : (
+          <div className={pokemonShowStyle}>
+            {pokemon ? (
+              <>
+                <img
+                  src={pokemon.sprites.front_default}
+                  className={pokemonAppearanceStyle}
+                  alt={pokemon.name}
+                />
+                <p className={pokemonNameStyle}>{pokemon.name}</p>
+                {pokemon.types.map(item => (
+                  <Label key={item.slot} color={toColor(item.type.name)}>
+                    {item.type.name}
+                  </Label>
+                ))}
+              </>
+            ) : (
+              undefined
+            )}
+          </div>
+        )}
+      </div>
+      <Button color="red" onClick={fetchPokemonLoad}>
+        Click to Appear!
+      </Button>
     </div>
-    <Button color="red" onClick={fetchPokemonLoad}>
-      Click to Appear!
-    </Button>
-  </div>
-);
+  );
+};

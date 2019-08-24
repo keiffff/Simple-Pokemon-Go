@@ -1,4 +1,4 @@
-export const typeToColor = (type: string) => {
+const pokemonTypeToColor = (type: string) => {
   switch (type) {
     case 'normal':
       return undefined;
@@ -36,5 +36,9 @@ export const typeToColor = (type: string) => {
       return 'black';
     case 'fairy':
       return 'pink';
+    default:
+      return undefined;
   }
 };
+
+export default pokemonTypeToColor;
