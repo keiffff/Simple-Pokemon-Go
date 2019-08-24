@@ -5,7 +5,7 @@ import { fetchPokemonById } from '../api/pokeApi';
 import { Pokemon } from '../api/models/pokemon';
 
 function* runFetchPokemon() {
-  const lastPokemonId = 807;
+  const lastPokemonId = 802;
   const pokemonId = Math.floor(Math.random() * (lastPokemonId + 1));
 
   try {
