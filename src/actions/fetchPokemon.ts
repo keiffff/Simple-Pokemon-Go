@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 
 import { Pokemon } from '../api/models/pokemon';
+import { CreatorsToActions } from '../utils/creatorsToActions';
 
 export enum ActionType {
   LOAD = 'FETCHPOKEMON/LOAD',
@@ -25,7 +26,4 @@ export const fetchPokemon = {
   }),
 };
 
-export type FetchPokemonAction =
-  | ReturnType<typeof fetchPokemon.load>
-  | ReturnType<typeof fetchPokemon.success>
-  | ReturnType<typeof fetchPokemon.failure>;
+export type FetchPokemonAction = CreatorsToActions<typeof fetchPokemon>;
