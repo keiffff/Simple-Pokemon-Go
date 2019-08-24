@@ -56,6 +56,11 @@ export const RandomlyShowPokemonComponent: React.FC<
   isLoading = false,
   fetchPokemonLoad = () => {},
 }) => {
+  const [isShiny, setIsShiny] = React.useState(false);
+  const onToggleShiny = React.useCallback(() => setIsShiny(!isShiny), [
+    isShiny,
+  ]);
+
   return (
     <div className={pageStyle}>
       <HeaderComponent />
@@ -69,7 +74,11 @@ export const RandomlyShowPokemonComponent: React.FC<
             {pokemon ? (
               <>
                 <img
-                  src={pokemon.sprites.front_default}
+                  src={
+                    isShiny
+                      ? pokemon.sprites.front_shiny
+                      : pokemon.sprites.front_default
+                  }
                   className={pokemonAppearanceStyle}
                   alt={pokemon.name}
                 />
@@ -89,6 +98,13 @@ export const RandomlyShowPokemonComponent: React.FC<
       <Button color="red" onClick={fetchPokemonLoad}>
         Click to Appear!
       </Button>
+      <Button
+        toggle
+        content="Shiny?"
+        icon="star"
+        color={isShiny ? 'yellow' : undefined}
+        onClick={onToggleShiny}
+      ></Button>
     </div>
   );
 };
