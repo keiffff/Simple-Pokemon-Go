@@ -9,19 +9,24 @@ export enum ActionType {
   FAILURE = 'FETCHPOKEMON/FAILURE',
 }
 
+interface FetchPokemonParams {
+  pokemonId: number;
+}
+
 export const fetchPokemon = {
-  load: () => ({
+  load: (params: FetchPokemonParams) => ({
     type: ActionType.LOAD as typeof ActionType.LOAD,
+    payload: { params },
   }),
 
-  success: (item: Pokemon) => ({
+  success: (params: FetchPokemonParams, item: Pokemon) => ({
     type: ActionType.SUCCESS as typeof ActionType.SUCCESS,
-    payload: { item },
+    payload: { params, item },
   }),
 
-  failure: (error: AxiosError) => ({
+  failure: (params: FetchPokemonParams, error: AxiosError) => ({
     type: ActionType.FAILURE as typeof ActionType.FAILURE,
-    payload: { error },
+    payload: { params, error },
     error: true,
   }),
 };

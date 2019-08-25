@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { css } from 'emotion';
 import { Button, Dimmer, Label, Loader } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 import toColor from '../utils/pokemonTypeToColor';
 import { Pokemon } from '../api/models/pokemon';
@@ -56,6 +57,11 @@ export const RandomlyShowPokemonComponent: React.FC<
   isLoading = false,
   fetchPokemonLoad = () => {},
 }) => {
+  const [isShiny, setIsShiny] = React.useState(false);
+  const onToggleShiny = React.useCallback(() => setIsShiny(!isShiny), [
+    isShiny,
+  ]);
+
   return (
     <div className={pageStyle}>
       <HeaderComponent />
@@ -68,11 +74,17 @@ export const RandomlyShowPokemonComponent: React.FC<
           <div className={pokemonShowStyle}>
             {pokemon ? (
               <>
-                <img
-                  src={pokemon.sprites.front_default}
-                  className={pokemonAppearanceStyle}
-                  alt={pokemon.name}
-                />
+                <Link to={`/pokemon/${pokemon.id}`}>
+                  <img
+                    src={
+                      isShiny
+                        ? pokemon.sprites.front_shiny
+                        : pokemon.sprites.front_default
+                    }
+                    className={pokemonAppearanceStyle}
+                    alt={pokemon.name}
+                  />
+                </Link>
                 <p className={pokemonNameStyle}>{pokemon.name}</p>
                 {pokemon.types.map(item => (
                   <Label key={item.slot} color={toColor(item.type.name)}>
@@ -89,6 +101,13 @@ export const RandomlyShowPokemonComponent: React.FC<
       <Button color="red" onClick={fetchPokemonLoad}>
         Click to Appear!
       </Button>
+      <Button
+        toggle
+        content="Shiny?"
+        icon="star"
+        color={isShiny ? 'yellow' : undefined}
+        onClick={onToggleShiny}
+      ></Button>
     </div>
   );
 };
