@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { css } from 'emotion';
 import { Button, Dimmer, Label, Loader } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 import toColor from '../utils/pokemonTypeToColor';
 import { Pokemon } from '../api/models/pokemon';
@@ -73,15 +74,17 @@ export const RandomlyShowPokemonComponent: React.FC<
           <div className={pokemonShowStyle}>
             {pokemon ? (
               <>
-                <img
-                  src={
-                    isShiny
-                      ? pokemon.sprites.front_shiny
-                      : pokemon.sprites.front_default
-                  }
-                  className={pokemonAppearanceStyle}
-                  alt={pokemon.name}
-                />
+                <Link to={`/pokemon/${pokemon.id}`}>
+                  <img
+                    src={
+                      isShiny
+                        ? pokemon.sprites.front_shiny
+                        : pokemon.sprites.front_default
+                    }
+                    className={pokemonAppearanceStyle}
+                    alt={pokemon.name}
+                  />
+                </Link>
                 <p className={pokemonNameStyle}>{pokemon.name}</p>
                 {pokemon.types.map(item => (
                   <Label key={item.slot} color={toColor(item.type.name)}>

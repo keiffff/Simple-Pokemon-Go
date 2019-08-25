@@ -4,15 +4,14 @@ import { ActionType, fetchPokemon } from '../actions/fetchPokemon';
 import { fetchPokemonById } from '../api/pokeApi';
 import { Pokemon } from '../api/models/pokemon';
 
-function* runFetchPokemon() {
-  const lastPokemonId = 802;
-  const pokemonId = Math.floor(Math.random() * (lastPokemonId + 1));
+function* runFetchPokemon(action: ReturnType<typeof fetchPokemon.load>) {
+  const { pokemonId } = action.payload.params;
 
   try {
     const pokemon: Pokemon = yield call(fetchPokemonById, pokemonId);
-    yield put(fetchPokemon.success(pokemon));
+    yield put(fetchPokemon.success({ pokemonId }, pokemon));
   } catch (error) {
-    yield put(fetchPokemon.failure(error));
+    yield put(fetchPokemon.failure({ pokemonId }, error));
   }
 }
 

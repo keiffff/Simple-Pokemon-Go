@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { withRouter } from 'react-router';
 
 import { RandomlyShowPokemonComponent } from '../components/RandomlyShowPokemonComponent';
-import { ActionType } from '../actions/fetchPokemon';
+import { fetchPokemon } from '../actions/fetchPokemon';
 import { Pokemon } from '../api/models/pokemon';
 import { State } from '../reducers/fetchPokemon';
 
@@ -20,9 +20,12 @@ const RandomlyShowPokemonContainer: React.FC = () => {
   }));
   const dispatch: Dispatch = useDispatch();
 
+  const lastPokemonId = 802;
+  const pokemonId = Math.floor(Math.random() * (lastPokemonId + 1));
+
   const fetchPokemonLoad: () => void = React.useCallback(
-    () => dispatch({ type: ActionType.LOAD }),
-    [dispatch],
+    () => dispatch(fetchPokemon.load({ pokemonId })),
+    [dispatch, pokemonId],
   );
 
   return (
