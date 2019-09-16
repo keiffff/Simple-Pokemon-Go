@@ -12,6 +12,7 @@ export interface RandomlyShowPokemonProps {
   pokemon?: Pokemon;
   isLoading: boolean;
   fetchPokemonLoad: () => void;
+  isShiny?: boolean;
 }
 
 const pageStyle = css({
@@ -50,18 +51,12 @@ const pokemonNameStyle = css({
   fontWeight: 'bold',
 });
 
-export const RandomlyShowPokemonComponent: React.FC<
-  RandomlyShowPokemonProps
-> = ({
+export const RandomlyShowPokemonComponent = ({
   pokemon = undefined,
   isLoading = false,
   fetchPokemonLoad = () => {},
-}) => {
-  const [isShiny, setIsShiny] = React.useState(false);
-  const onToggleShiny = React.useCallback(() => setIsShiny(!isShiny), [
-    isShiny,
-  ]);
-
+  isShiny = false,
+}: RandomlyShowPokemonProps) => {
   return (
     <div className={pageStyle}>
       <HeaderComponent />
@@ -92,22 +87,13 @@ export const RandomlyShowPokemonComponent: React.FC<
                   </Label>
                 ))}
               </>
-            ) : (
-              undefined
-            )}
+            ) : null}
           </div>
         )}
       </div>
       <Button color="red" onClick={fetchPokemonLoad}>
         Click to Appear!
       </Button>
-      <Button
-        toggle
-        content="Shiny?"
-        icon="star"
-        color={isShiny ? 'yellow' : undefined}
-        onClick={onToggleShiny}
-      ></Button>
     </div>
   );
 };
