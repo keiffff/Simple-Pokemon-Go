@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
+import { all, call, fork, put, takeLatest, delay } from 'redux-saga/effects';
 
 import { ActionType, fetchPokemon } from '../actions/fetchPokemon';
 import { fetchPokemonById } from '../api/pokeApi';
@@ -9,6 +9,7 @@ function* runFetchPokemon(action: ReturnType<typeof fetchPokemon.load>) {
 
   try {
     const pokemon: Pokemon = yield call(fetchPokemonById, pokemonId);
+    yield delay(1000);
     yield put(fetchPokemon.success({ pokemonId }, pokemon));
   } catch (error) {
     yield put(fetchPokemon.failure({ pokemonId }, error));

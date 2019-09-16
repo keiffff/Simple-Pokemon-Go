@@ -9,7 +9,6 @@ import createSagaMiddleware from 'redux-saga';
 
 import './index.css';
 import RandomlyShowPokemonContainer from './containers/RandomlyShowPokemonContainer';
-import ShowPokemonDetailComponent from './components/ShowPokemonDetailComponent';
 import reducer from './reducers/fetchPokemon';
 import { rootSaga } from './sagas/fetchPokemon';
 
@@ -19,7 +18,6 @@ const store = createStore(reducer, applyMiddleware(sagaMiddlaware));
 const Page: React.FC = () => (
   <Switch>
     <Route exact path="/" component={RandomlyShowPokemonContainer} />
-    <Route exact path="/pokemon/:id" component={ShowPokemonDetailComponent} />
     <Redirect to="/" />
   </Switch>
 );
