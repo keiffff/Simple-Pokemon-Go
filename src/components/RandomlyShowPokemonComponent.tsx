@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { css } from 'emotion';
 import { Button, Dimmer, Label, Loader } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 
 import toColor from '../utils/pokemonTypeToColor';
 import { Pokemon } from '../api/models/pokemon';
 import bgGrass from '../assets/images/bg_grass.jpg';
 import { HeaderComponent } from './HeaderComponent';
+import { ShinyEffect } from '../effects/Shiny';
 
 export interface RandomlyShowPokemonProps {
   pokemon?: Pokemon;
@@ -38,6 +38,7 @@ const wrapperStyle = css({
 const pokemonShowStyle = css({
   color: '#263238',
   paddingTop: 160,
+  position: 'relative',
 });
 
 const pokemonAppearanceStyle = css({
@@ -49,6 +50,15 @@ const pokemonNameStyle = css({
   color: 'white',
   fontSize: '32px',
   fontWeight: 'bold',
+});
+
+const buttonWrapperStyle = css({
+  display: 'block',
+  marginTop: 8,
+});
+
+const buttonStyle = css({
+  width: 200,
 });
 
 export const RandomlyShowPokemonComponent = ({
@@ -69,17 +79,16 @@ export const RandomlyShowPokemonComponent = ({
           <div className={pokemonShowStyle}>
             {pokemon ? (
               <>
-                <Link to={`/pokemon/${pokemon.id}`}>
-                  <img
-                    src={
-                      isShiny
-                        ? pokemon.sprites.front_shiny
-                        : pokemon.sprites.front_default
-                    }
-                    className={pokemonAppearanceStyle}
-                    alt={pokemon.name}
-                  />
-                </Link>
+                {isShiny ? <ShinyEffect /> : null}
+                <img
+                  src={
+                    isShiny
+                      ? pokemon.sprites.front_shiny
+                      : pokemon.sprites.front_default
+                  }
+                  className={pokemonAppearanceStyle}
+                  alt={pokemon.name}
+                />
                 <p className={pokemonNameStyle}>{pokemon.name}</p>
                 {pokemon.types.map(item => (
                   <Label key={item.slot} color={toColor(item.type.name)}>
@@ -91,9 +100,21 @@ export const RandomlyShowPokemonComponent = ({
           </div>
         )}
       </div>
-      <Button color="red" onClick={fetchPokemonLoad}>
-        Click to Appear!
-      </Button>
+      <div className={buttonWrapperStyle}>
+        <Button
+          className={buttonStyle}
+          color="red"
+          onClick={fetchPokemonLoad}
+          disabled={isLoading}
+        >
+          Click to Appear!
+        </Button>
+      </div>
+      <div className={buttonWrapperStyle}>
+        <Button className={buttonStyle} color="green" disabled={isLoading}>
+          Use Pokeball!
+        </Button>
+      </div>
     </div>
   );
 };
