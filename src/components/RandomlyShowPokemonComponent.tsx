@@ -52,6 +52,12 @@ const pokemonNameStyle = css({
   fontWeight: 'bold',
 });
 
+const shinyEffectStyle = css({
+  position: 'absolute',
+  top: '20%',
+  left: '30%',
+});
+
 const buttonWrapperStyle = css({
   display: 'block',
   marginTop: 8,
@@ -79,7 +85,7 @@ export const RandomlyShowPokemonComponent = ({
           <div className={pokemonShowStyle}>
             {pokemon ? (
               <>
-                {isShiny ? <ShinyEffect /> : null}
+                {isShiny ? <ShinyEffect className={shinyEffectStyle} /> : null}
                 <img
                   src={
                     isShiny

@@ -3,12 +3,15 @@ import Classnames from 'classnames';
 import { css, keyframes } from 'emotion';
 import Star from '../assets/images/star.svg';
 
+interface Props {
+  className?: string;
+  count?: number | 'infinite';
+  fadeout?: number;
+}
+
 const baseStyle = css({
   width: 300,
   display: 'inline-block',
-  position: 'absolute',
-  top: '20%',
-  left: '30%',
   textAlign: 'center',
   zIndex: 100,
 });
@@ -41,29 +44,29 @@ const starsPulse = keyframes(`
   }
 `);
 
-const starStyles = [
-  css({
-    animation: `${starsPulse} 1s ease-in-out 1`,
-    left: 10,
-  }),
-  css({
-    animation: `${starsPulse} 1s 0.2s ease-in-out 1`,
-    left: 40,
-  }),
-  css({
-    animation: `${starsPulse} 1s 0.4s ease-in-out 1`,
-    left: 70,
-  }),
-];
+export const ShinyEffect = ({ className, count = 1, fadeout = 500 }: Props) => {
+  const starStyles = [
+    css({
+      animation: `${starsPulse} 1s ease-in-out ${count}`,
+      left: 10,
+    }),
+    css({
+      animation: `${starsPulse} 1s 0.2s ease-in-out ${count}`,
+      left: 40,
+    }),
+    css({
+      animation: `${starsPulse} 1s 0.4s ease-in-out ${count}`,
+      left: 70,
+    }),
+  ];
 
-export const ShinyEffect = () => {
   const [visibility, setVisibility] = React.useState(true);
   const handleSetVisibility = React.useCallback(() => {
-    setTimeout(() => setVisibility(false), 500);
-  }, []);
+    setTimeout(() => setVisibility(false), fadeout);
+  }, [fadeout]);
 
   return (
-    <section className={baseStyle}>
+    <section className={Classnames(baseStyle, className)}>
       <div className={loaderStyle}>
         {[...Array(3)].map((_, i) => (
           <img
@@ -73,7 +76,6 @@ export const ShinyEffect = () => {
             onAnimationEnd={handleSetVisibility}
           />
         ))}
-        ,
       </div>
     </section>
   );
