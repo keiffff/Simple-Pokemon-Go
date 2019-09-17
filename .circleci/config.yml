@@ -43,7 +43,7 @@ jobs:
       - npm_install
       - run:
           name: Test Project
-          command: yarn test
+          command: yarn lint --fix
   deploy:
     executor:
       name: default
